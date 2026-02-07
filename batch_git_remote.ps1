@@ -17,17 +17,25 @@ function Load-Env {
 # 執行載入
 Load-Env
 
+# 切換 GitHub 帳號 (確保權限正確)
+if ($env:GITHUB_ACCOUNT) {
+    Write-Host "切換 GitHub 帳號至: $env:GITHUB_ACCOUNT" -ForegroundColor Cyan
+    gh auth switch -u $env:GITHUB_ACCOUNT 2>$null
+}
+
 # 設定搜尋的根目錄
 $rootPath = if ($env:ROOT_PATH) { $env:ROOT_PATH } else { "D:\github\chiisen\" }
 # 設定 Log 與 輸出路徑
 $logDir = Join-Path $PSScriptRoot "logs"
+$outDir = Join-Path $PSScriptRoot "out"
 $logPath = Join-Path $logDir "git_remote_list.log"
 $debugLogPath = Join-Path $logDir "git_remote_debug.log"
 $excludedLogPath = Join-Path $logDir "excluded_projects.log"
-$projectsExtractPath = Join-Path $PSScriptRoot "extracted_projects.txt"
+$projectsExtractPath = Join-Path $outDir "extracted_projects.txt"
 
-# 確保 Log 資料夾存在
+# 確保資料夾存在
 if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }
+if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir | Out-Null }
 
 $startTime = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
 Write-Host "開始掃描並導出標準專案清單 (Exclude Private/Fork)..." -ForegroundColor Cyan
@@ -116,4 +124,5 @@ $summary | Out-File -FilePath $debugLogPath -Append -Encoding utf8
 Write-Host $summary -ForegroundColor Cyan
 Write-Host "標準結果: $logPath" -ForegroundColor Yellow
 Write-Host "排除結果: $excludedLogPath" -ForegroundColor Gray
+Write-Host "導出結果: $projectsExtractPath" -ForegroundColor DarkCyan
 Write-Host "異常結果: $debugLogPath" -ForegroundColor Magenta

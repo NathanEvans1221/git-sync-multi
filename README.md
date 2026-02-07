@@ -63,6 +63,7 @@
 掃描 `ROOT_PATH` 下所有 Git 專案的遠端位址 (`git remote -v`)，並自動分類與導出可用清單。
 
 #### 功能特點
+- **自動切換帳號**：啟動時自動讀取 `.env` 中的 `GITHUB_ACCOUNT` 並切換，確保抓取權限。
 - **中文狀態提示**：
     - `[✅ 已導出 ...]`：符合條件並成功寫入清單。
     - `[⏭️ 已跳過]`：因私有、分支、或完成標記而排除。
@@ -70,7 +71,7 @@
     - **`git_remote_list.log`**: 完整掃描紀錄。
     - **`excluded_projects.log`**: 詳細記錄每個專案被略過的原因。
     - **`git_remote_debug.log`**: 紀錄擁有 3 筆以上遠端位址的複雜專案。
-- **自動導出清單**：自動將標準公開專案導出至根目錄的 **`extracted_projects.txt`**。
+- **自動導出清單**：自動將標準公開專案導出至 **`out/extracted_projects.txt`**。
 - **智慧過濾**：
     - 自動排除 **Private (私人)** 與 **Fork** 專案（畫面會提示原因）。
     - 自動排除 Description 開頭為 **✅** 的已完成專案（畫面會提示原因）。
@@ -79,9 +80,9 @@
 #### 使用方法
 - 在 PowerShell 中執行：`./batch_git_remote.ps1`
 - **結果檔案**：
-    - 標準清單：`git_remote_list.log`
-    - 調試合併：`git_remote_debug.log`
-    - 導出專案：`extracted_projects.txt`
+    - 標準清單：`logs/git_remote_list.log`
+    - 調試合併：`logs/git_remote_debug.log`
+    - 導出專案：`out/extracted_projects.txt`
 
 ---
 
@@ -115,7 +116,7 @@ GITHUB_ACCOUNT=your_username        # 您的主要 GitHub 帳號
 - **`logs/git_remote_list.log`**: 記錄掃描到的標準遠端位址清單。
 - **`logs/excluded_projects.log`**: 紀錄 `batch_git_remote.ps1` 略過專案的詳細原因。
 - **`logs/git_remote_debug.log`**: 記錄擁有多重遠端位址的專案。
-- **`extracted_projects.txt`**: (存於根目錄) 導出的可用專案清單，格式符合 `projects.txt`。
+- **`out/extracted_projects.txt`**: 導出的可用專案清單，格式符合 `projects.txt`。
 - **`logs/git_pull_errors.log`**: 記錄更新失敗的倉庫。
 - **`logs/git_status_changed.log`**: 記錄偵測到異動的檔案清單與專案描述。
 
