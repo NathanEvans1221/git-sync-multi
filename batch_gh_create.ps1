@@ -38,11 +38,16 @@ $rootPath = if ($env:ROOT_PATH) { $env:ROOT_PATH } else { "D:\github\chiisen\" }
 $mainAccount = $env:GITHUB_ACCOUNT
 $accountsFile = Join-Path $PSScriptRoot "accounts.txt"
 $projectsFile = Join-Path $PSScriptRoot "projects.txt"
+$createLogPath = Join-Path $PSScriptRoot "create_log.log"
 
 # 顯示主帳號資訊
 if ($mainAccount) {
-    Write-Host "設定之主帳號: $mainAccount" -ForegroundColor Gray
+    Write-Host "設定之主帳號: $mainAccount" -ForegroundColor Cyan
 }
+
+# 1. 初始化日誌檔案 (清空舊資料)
+$startTime = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+"--- GitHub Repository Creation Batch Start: $startTime ---`n根目錄: $rootPath`n主帳號: $mainAccount`n" | Out-File -FilePath $createLogPath -Encoding utf8
 
 # 檢查檔案
 if (-not (Test-Path $accountsFile)) {
@@ -101,20 +106,34 @@ foreach ($owner in $accounts) {
                 Write-Host "  -> 權限: $visibility" -ForegroundColor Gray
                 Write-Host "  -> Fork: $(if ($isFork){'是'}else{'否'})" -ForegroundColor Gray
 
+                # 新增：檢查本地遠端設定
+                $remoteLogInfo = ""
+                if (Test-Path $targetDir) {
+                    $remotes = @(git -C $targetDir remote -v 2>$null | Where-Object { $_.Trim() -ne "" })
+                    if ($remotes.Count -eq 2) {
+                        Write-Host "  -> 遠端設定:" -ForegroundColor Gray
+                        $remotes | ForEach-Object { 
+                            Write-Host "     $_" -ForegroundColor Gray 
+                        }
+                        # 僅在標準兩筆情況下將遠端資訊存入日誌
+                        $remoteLogInfo = "`n      遠端明細:`n      " + ($remotes -join "`n      ")
+                    }
+                }
+
                 if ($isPrivate) {
                     Write-Host "警告: $repoFull 為私人專案，略過處理。" -ForegroundColor Red
-                    "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [WARN] SKIP PRIVATE: $repoFull (Desc: $desc)" | Out-File -FilePath (Join-Path $PSScriptRoot "create_log.txt") -Append
+                    "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [WARN] SKIP PRIVATE: $repoFull (Desc: $desc)$remoteLogInfo" | Out-File -FilePath $createLogPath -Append
                     continue
                 }
                 
                 if ($isFork) {
                     Write-Host "警告: $repoFull 為 Fork 專案，略過處理。" -ForegroundColor Red
-                    "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [WARN] SKIP FORK: $repoFull (Desc: $desc)" | Out-File -FilePath (Join-Path $PSScriptRoot "create_log.txt") -Append
+                    "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [WARN] SKIP FORK: $repoFull (Desc: $desc)$remoteLogInfo" | Out-File -FilePath $createLogPath -Append
                     continue
                 }
 
                 Write-Host "跳過: GitHub 倉庫 $repoFull 已存在 (公開)。" -ForegroundColor Yellow
-                "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [EXIST] $repoFull already exists" | Out-File -FilePath (Join-Path $PSScriptRoot "create_log.txt") -Append
+                "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [EXIST] $repoFull already exists$remoteLogInfo" | Out-File -FilePath $createLogPath -Append
             } else {
                 # 2. 建立 GitHub 倉庫
                 Write-Host "正在建立倉庫..." -ForegroundColor Green
@@ -152,12 +171,12 @@ foreach ($owner in $accounts) {
                     
                     if ($LASTEXITCODE -eq 0) {
                         Write-Host "成功建立: $repoFull" -ForegroundColor Green
-                        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [SUCCESS] Created $repoFull" | Out-File -FilePath (Join-Path $PSScriptRoot "create_log.txt") -Append
+                        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [SUCCESS] Created $repoFull" | Out-File -FilePath $createLogPath -Append
                     } else {
                         $errorMessage = $output | Out-String
                         Write-Host "建立失敗: $repoFull" -ForegroundColor Red
                         Write-Host "錯誤原因:`n$errorMessage" -ForegroundColor Yellow
-                        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [ERROR] Failed to create $repoFull. Reason: $($errorMessage.Trim())" | Out-File -FilePath (Join-Path $PSScriptRoot "create_log.txt") -Append
+                        "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [ERROR] Failed to create $repoFull. Reason: $($errorMessage.Trim())" | Out-File -FilePath $createLogPath -Append
                     }
                 } catch {
                     Write-Host "執行過程發生意外錯誤: $($_.Exception.Message)" -ForegroundColor Red

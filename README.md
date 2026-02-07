@@ -16,7 +16,7 @@
 - 在 `accounts.txt` 填入 GitHub 帳號清單。
 - 在 `projects.txt` 填入專案資訊（例如：`my-repo --public`）。
 - 執行：`./batch_gh_create.ps1`
-- **日誌紀錄**：所有的成功、跳過或錯誤原因都會紀錄在 `create_log.txt`。
+- **日誌紀錄**：所有的成功、跳過或錯誤原因都會紀錄在 `create_log.log`。
 
 ---
 
@@ -48,6 +48,15 @@
 
 ---
 
+### 5. batch_git_remote.ps1 (批次遠端檢查)
+掃描 `ROOT_PATH` 下所有 Git 專案的遠端位址 (`git remote -v`)。
+
+#### 使用方法
+- 在 PowerShell 中執行：`./batch_git_remote.ps1`
+- **記錄檔**：所有專案的遠端位址會記錄在 `git_remote_list.log` 中。
+
+---
+
 ## ⚙️ 配置說明
 
 ### 1. 環境變數 (.env)
@@ -74,7 +83,7 @@ GITHUB_ACCOUNT=your_username        # 您的主要 GitHub 帳號
 
 本工具產生的日誌檔案均已加入 `.gitignore`，不會被上傳：
 
-- **`create_log.txt`**: 記錄 `batch_gh_create.ps1` 的執行結果。
+- **`create_log.log`**: 記錄 `batch_gh_create.ps1` 的執行結果。
     - `[SUCCESS]`: 成功建立新倉庫。
     - `[EXIST]`: 倉庫已存在（公開專案）。
     - `[WARN]`: 略過私人專案或 Fork 專案的警告紀錄。
@@ -89,6 +98,7 @@ GITHUB_ACCOUNT=your_username        # 您的主要 GitHub 帳號
 - `batch_git_pull.ps1`: 批次更新工具。
 - `batch_create_git_sync.ps1`: 批次同步腳本初始化工具。
 - `batch_git_status.ps1`: 批次異動檢查工具。
+- `batch_git_remote.ps1`: 批次遠端位址掃描工具。
 - `accounts.txt.example`: 帳號清單範本。
 - `projects.txt.example`: 專案清單範本。
 - `.env.example`: 環境變數範本。
