@@ -48,7 +48,7 @@ gh auth switch --user $mainAccount 2>$null
 Start-Sleep -Seconds 2
 
 # --- 讀取專案清單 ---
-$projectsFile = Join-Path $PSScriptRoot "ini\repos_to_done.txt"
+$projectsFile = Join-Path $PSScriptRoot "ini\repos_to_done.ini"
 
 if (-not (Test-Path $projectsFile)) {
     Write-Host "錯誤: 找不到 $projectsFile" -ForegroundColor Red

@@ -7,7 +7,7 @@
 
 ### ✨ Features (新功能)
 - **mark_repos_done.ps1**: 新增批次標記專案完成工具，可將主帳號 Repository 的 description 從 `⁉️` 改為 `✅`。
-    - 使用獨立設定檔 `ini/repos_to_done.txt`，與其他腳本設定分離避免誤用。
+    - 使用獨立設定檔 `ini/repos_to_done.ini`，與其他腳本設定分離避免誤用。
     - 日誌記錄於 `logs/mark_done_log.log`。
 - **batch_gh_create.ps1 增強**: 
     - 建立其他帳號 Repository 後，自動更新主帳號 description 加上 `⁉️` 提醒。
@@ -15,6 +15,7 @@
 - **Configuration (設定變更)**:
     - 將 `accounts.txt` 更名為 `accounts.ini` 以符合其格式特性。
     - 將 `projects.txt` 更名為 `projects.ini` 以統一設定檔格式。
+    - 將 `repos_to_done.txt` 更名為 `repos_to_done.ini` 以統一設定檔格式。
     - `batch_git_remote.ps1` 導出檔名變更為 `extracted_projects.ini`。
 
 ## [1.1.0] - 2026-02-08
