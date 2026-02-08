@@ -12,6 +12,10 @@
 - **batch_gh_create.ps1 增強**: 
     - 建立其他帳號 Repository 後，自動更新主帳號 description 加上 `⁉️` 提醒。
     - 更新成功後自動執行專案的 `setup_git_sync.ps1` 並處理 Git 變更（自動 commit 與 pull）。
+- **Configuration (設定變更)**:
+    - 將 `accounts.txt` 更名為 `accounts.ini` 以符合其格式特性。
+    - 將 `projects.txt` 更名為 `projects.ini` 以統一設定檔格式。
+    - `batch_git_remote.ps1` 導出檔名變更為 `extracted_projects.ini`。
 
 ## [1.1.0] - 2026-02-08
 ### 🚀 Performance (效能優化)
@@ -29,8 +33,8 @@
 ### ♻️ Refactor (重構)
 - **Directory Structure**: 規範化目錄結構：
     - `logs/`: 集中存放所有日誌。
-    - `ini/`: 存放 `accounts.txt` 與 `projects.txt` 設定檔。
-    - `out/`: 存放導出的專案清單。
+    - `ini/`: 存放 `accounts.ini` 與 `projects.ini` 設定檔。
+    - `out/`: 存放導出的專案清單 (`extracted_projects.ini`)。
     - `temp/`: 存放 `setup_git_sync.ps1.example` 等中間範本。
 - **Documentation**: 建立 `GEMINI.md` 作為 AI Agent 協作指南；統一所有腳本的標頭註解與啟動提示。
 

@@ -1,5 +1,14 @@
+# 忽略所有 log 檔案
 *.log
+
+# 忽略 .env 檔案
 .env
+
+# 忽略所有 .ini 檔案(一般是設定檔案，不需要上傳到 GitHub)
+*.ini
+
+# 忽略舊版的 txt 檔案(⁉️之後再調整)
 projects.txt
 accounts.txt
 extracted_projects.txt
+repos_to_done.txt

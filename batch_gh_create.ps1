@@ -74,8 +74,8 @@ $rootPath = if ($env:ROOT_PATH) { $env:ROOT_PATH } else { "D:\github\chiisen\" }
 $mainAccount = $env:GITHUB_ACCOUNT
 $logDir = Join-Path $PSScriptRoot "logs"
 $outDir = Join-Path $PSScriptRoot "ini"
-$accountsFile = Join-Path $outDir "accounts.txt"
-$projectsFile = Join-Path $outDir "projects.txt"
+$accountsFile = Join-Path $outDir "accounts.ini"
+$projectsFile = Join-Path $outDir "projects.ini"
 $createLogPath = Join-Path $logDir "create_log.log"
 
 # 確保資料夾存在
@@ -93,11 +93,11 @@ $startTime = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
 
 # 檢查檔案
 if (-not (Test-Path $accountsFile)) {
-    Write-Error "找不到 accounts.txt。請參考 accounts.txt.example 建立。"
+    Write-Error "找不到 accounts.ini。請參考 accounts.ini.example 建立。"
     exit
 }
 if (-not (Test-Path $projectsFile)) {
-    Write-Error "找不到 projects.txt。請參考 projects.txt.example 建立。"
+    Write-Error "找不到 projects.ini。請參考 projects.ini.example 建立。"
     exit
 }
 

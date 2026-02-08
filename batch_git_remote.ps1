@@ -41,7 +41,7 @@ $outDir = Join-Path $PSScriptRoot "out"
 $logPath = Join-Path $logDir "git_remote_list.log"
 $debugLogPath = Join-Path $logDir "git_remote_debug.log"
 $excludedLogPath = Join-Path $logDir "excluded_projects.log"
-$projectsExtractPath = Join-Path $outDir "extracted_projects.txt"
+$projectsExtractPath = Join-Path $outDir "extracted_projects.ini"
 
 # 確保資料夾存在
 if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }
@@ -53,7 +53,7 @@ Write-Host "開始掃描並導出標準專案清單 (Exclude Private/Fork)..." -
 # 初始 Log 與導出檔 (清空舊資料)
 "--- Git Remote Address List: $startTime ---`n" | Out-File -FilePath $logPath -Encoding utf8
 "--- Git Remote Multiple Remotes Debug: $startTime ---`n" | Out-File -FilePath $debugLogPath -Encoding utf8
-# extracted_projects.txt 與 excluded_projects.log 直接清空
+# extracted_projects.ini 與 excluded_projects.log 直接清空
 $null | Out-File -FilePath $projectsExtractPath -Encoding utf8
 "--- Excluded Projects Reasons: $startTime ---`n" | Out-File -FilePath $excludedLogPath -Encoding utf8
 
@@ -116,7 +116,7 @@ $measure = Measure-Command {
                         if (-not $isPrivate -and -not $isFork -and -not $isDone -and -not $isDifferentOwner) {
                             # 畫面即時顯示成功
                             Write-Host "處理專案: $($dir.Name)" -ForegroundColor Gray
-                            Write-Host "  [✅ 已導出 extracted_projects.txt] $($dir.Name)" -ForegroundColor Green
+                            Write-Host "  [✅ 已導出 extracted_projects.ini] $($dir.Name)" -ForegroundColor Green
                             
                             # [Export] 成功導出
                             $debugInfo = "    [DEBUG] Private: $isPrivate, Fork: $isFork, Done: $isDone"

@@ -6,7 +6,7 @@
 所有腳本開發應遵循以下路徑約定：
 
 - **`logs/`**: 所有日誌檔案 (`*.log`)、錯誤紀錄、與過程偵錯資料均應存放在此。
-- **`ini/`**: 所有使用者設定檔 (`*.txt`) 與對應的範本檔 (`*.example`) 均應存放在此。
+- **`ini/`**: 所有使用者設定檔 (`*.txt`, `*.ini`) 與對應的範本檔 (`*.example`) 均應存放在此。
 - **`temp/`**: 存放中間過程所需的範本檔案或暫存資料（如 `setup_git_sync.ps1.example`）。
 - **`out/`**: 腳本執行後的最終資料產出物（如導出的專案清單）應存放在此。
 - **根目錄**: 僅存放核心腳本 (`*.ps1`) 為原則。
@@ -17,7 +17,7 @@
 ```mermaid
 graph TD
     ENV[.env] -->|1. 載入帳號 GITHUB_ACCOUNT| Script((*.ps1))
-    INI[ini/*.txt] -->|2. 讀取清單| Script
+    INI[ini/*.txt, *.ini] -->|2. 讀取清單| Script
     Template[temp/*.example] -->|3. 讀取範本| Script
     
     subgraph Core Logic ["Parallel Processing (平行處理)"]
@@ -31,7 +31,7 @@ graph TD
     Thread3 -->|Buffer Data| MemoryBuffer
     
     MemoryBuffer -->|5. 批次寫入 (Batch Write)| Logs[logs/*.log]
-    MemoryBuffer -->|5. 批次寫入 (Batch Write)| Out[out/*.txt]
+    MemoryBuffer -->|5. 批次寫入 (Batch Write)| Out[out/*.ini]
     MemoryBuffer -->|5. 自愈還原 (Auto-Heal)| GitRepo[Git Repo]
 ```
 

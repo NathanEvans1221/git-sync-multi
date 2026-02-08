@@ -19,13 +19,13 @@
 
 #### 功能特點
 - **多帳號自動切換**：自動偵測 `gh auth status` 中的帳號並執行 `gh auth switch`。
-- **雙檔案配置**：透過 `accounts.txt` 管理帳號，`projects.txt` 管理專案名稱與參數。
+- **雙檔案配置**：透過 `accounts.ini` 管理帳號，`projects.ini` 管理專案名稱與參數。
 - **智慧過濾**：自動跳過已存在的專案，若為私人或 Fork 專案會發出明顯警告。
 - **自動關聯**：若本地已存在資料夾且無遠端關聯，自動執行 `git init`、`commit` 並推送到新建立的遠端。
 
 #### 使用方法
-- 在 `ini/accounts.txt` 填入 GitHub 帳號清單。
-- 在 `ini/projects.txt` 填入專案資訊（例如：`my-repo --public`）。
+- 在 `ini/accounts.ini` 填入 GitHub 帳號清單。
+- 在 `ini/projects.ini` 填入專案資訊（例如：`my-repo --public`）。
 - 執行：`./batch_gh_create.ps1`
 - **日誌紀錄**：所有的成功、跳過或錯誤原因都會紀錄在 `logs/create_log.log`。
 
@@ -90,7 +90,7 @@
     - **`git_remote_list.log`**: 完整掃描紀錄。
     - **`excluded_projects.log`**: 詳細記錄每個專案被略過的原因。
     - **`git_remote_debug.log`**: 紀錄擁有 3 筆以上遠端位址的複雜專案。
-- **自動導出清單**：自動將標準公開專案導出至 **`out/extracted_projects.txt`**。
+- **自動導出清單**：自動將標準公開專案導出至 **`out/extracted_projects.ini`**。
 - **智慧過濾**：
     - 自動排除 **Private (私人)** 與 **Fork** 專案（畫面會提示原因）。
     - 自動排除 Description 開頭為 **✅** 的已完成專案（畫面會提示原因）。
@@ -101,7 +101,7 @@
 - **結果檔案**：
     - 標準清單：`logs/git_remote_list.log`
     - 調試合併：`logs/git_remote_debug.log`
-    - 導出專案：`out/extracted_projects.txt`
+    - 導出專案：`out/extracted_projects.ini`
 
 ---
 
@@ -129,15 +129,15 @@ ROOT_PATH="D:\github\chiisen\"      # 所有專案存放的根目錄
 GITHUB_ACCOUNT=your_username        # 您的主要 GitHub 帳號
 ```
 
-### 2. 帳號清單 (ini/accounts.txt)
+### 2. 帳號清單 (ini/accounts.ini)
 列出所有受管理的 GitHub 帳號（需已透過 `gh auth login` 登入）：
 - 格式：每行一個帳號名稱。
-- 範例請參考 `ini/accounts.txt.example`。
+- 範例請參考 `ini/accounts.ini.example`。
 
-### 3. 專案清單 (ini/projects.txt)
+### 3. 專案清單 (ini/projects.ini)
 列出您想要巡檢或建立的專案名稱與 `gh` 參數：
 - 格式：`[專案名稱] [可選參數]`。
-- 範例請參考 `ini/projects.txt.example`。
+- 範例請參考 `ini/projects.ini.example`。
 - **支援參數**：可加入 `--public`, `--private`, `--description "..."`, `--license mit` 等所有 GitHub CLI 支援的參數。
 
 ### 4. 完成標記清單 (ini/repos_to_done.txt)
@@ -174,7 +174,7 @@ GITHUB_ACCOUNT=your_username        # 您的主要 GitHub 帳號
 - **`logs/excluded_projects.log`**: 紀錄 `batch_git_remote.ps1` 略過專案的詳細原因。
 - **`logs/git_remote_debug.log`**: 記錄擁有多重遠端位址的專案。
 - **`logs/excluded_sync_projects.log`**: 記錄 `batch_create_git_sync.ps1` 略過的專案（Private, Fork, 或 ✅）。
-- **`out/extracted_projects.txt`**: 導出的可用專案清單，格式符合 `projects.txt`。
+- **`out/extracted_projects.ini`**: 導出的可用專案清單，格式符合 `projects.ini`。
 - **`logs/git_pull_errors.log`**: 記錄更新失敗的倉庫。
 - **`logs/git_status_changed.log`**: 記錄偵測到異動的檔案清單與專案描述。
 - **`logs/mark_done_log.log`**: 記錄 `mark_repos_done.ps1` 的執行結果。
@@ -190,8 +190,8 @@ GITHUB_ACCOUNT=your_username        # 您的主要 GitHub 帳號
 - `batch_git_status.ps1`: 批次異動檢查工具。
 - `batch_git_remote.ps1`: 批次遠端位址掃描工具。
 - `mark_repos_done.ps1`: 批次標記專案完成工具。
-- `ini/accounts.txt.example`: 帳號清單範本。
-- `ini/projects.txt.example`: 專案清單範本。
+- `ini/accounts.ini.example`: 帳號清單範本。
+- `ini/projects.ini.example`: 專案清單範本。
 - `ini/repos_to_done.txt.example`: 完成標記清單範本。
 - `temp/setup_git_sync.ps1.example`: 同步腳本生成範本。
 - `.env.example`: 環境變數範本。
