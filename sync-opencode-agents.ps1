@@ -63,6 +63,7 @@ if (-not (Test-Path $SourceFile)) {
 Write-Host "複製檔案 $FileName 到目標目錄..." -ForegroundColor Cyan
 foreach ($dest in $DestFileList) {
     Copy-Item -Path $SourceFile -Destination $dest -Force
+    Write-Host "覆蓋檔案：$dest" -ForegroundColor Yellow
 }
 
 Write-Host "完成！" -ForegroundColor Green
